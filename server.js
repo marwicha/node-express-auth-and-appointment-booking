@@ -7,8 +7,10 @@ const app = express();
 const dbConfig = require("./models");
 const Role = dbConfig.role;
 
-dbConfig.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+const mongoose = require('mongoose');
+
+
+mongoose.connect(`mongodb+srv://marwa:mriwa654@auth-node.cpcsm.gcp.mongodb.net/ikdo?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -65,6 +67,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
+
+// routes for auth and user
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
