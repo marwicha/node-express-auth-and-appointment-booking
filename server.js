@@ -9,7 +9,6 @@ const Role = dbConfig.role;
 
 const mongoose = require('mongoose');
 
-
 mongoose.connect(`mongodb+srv://marwa:mriwa654@auth-node.cpcsm.gcp.mongodb.net/ikdo?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -52,7 +51,7 @@ mongoose.connect(`mongodb+srv://marwa:mriwa654@auth-node.cpcsm.gcp.mongodb.net/i
 
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://localhost:3000"
 };
 
 app.use(cors(corsOptions));
@@ -63,14 +62,18 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "IKDO application." });
 });
 
-// routes for auth and user
+// routes for auth user
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
+
+// routes for create appointnment
+require('./routes/appointment.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+ObjectId = mongoose.Schema.Types.ObjectId;
+
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
@@ -8,7 +10,7 @@ const User = mongoose.model(
     password: String,
     roles: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "Role"
       }
     ]
