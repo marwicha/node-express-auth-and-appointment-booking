@@ -5,7 +5,9 @@ ObjectId = mongoose.Schema.Types.ObjectId;
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
-    username: String,
+    firstname: String,
+    lastnam: String,
+    phone: Number,
     email: String,
     password: String,
     roles: [

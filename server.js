@@ -72,11 +72,12 @@ app.get("/", (req, res) => {
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 
-// routes for create appointnment
+// routes for create appointnment and slots
 require('./routes/appointment.routes')(app);
+require('./routes/slot.routes')(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8082;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

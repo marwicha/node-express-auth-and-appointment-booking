@@ -8,12 +8,12 @@ var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   const user = new User({
-    username: req.body.username,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    phone: req.body.phone,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8)
   });
-
-
 
   user.save((err, user) => {
     if (err) {
@@ -39,7 +39,7 @@ exports.signup = (req, res) => {
               return;
             }
 
-            res.send({ message: "User was registered successfully!" });
+            res.send({ message: "Vous êtes enregistré avec success !" });
           });
         }
       );
@@ -57,7 +57,7 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.send({ message: "Vous êtes enregistré avec success!" });
         });
       });
     }
@@ -76,10 +76,10 @@ exports.signin = (req, res) => {
       }
 
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "Utilisateur introuvable." });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
+      const passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
       );
@@ -87,22 +87,24 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "Mot de passe invalide!"
         });
       }
 
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      const token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
 
-      var authorities = [];
+      const authorities = [];
 
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
       res.status(200).send({
         id: user._id,
-        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        phone: user.phone,
         email: user.email,
         roles: authorities,
         accessToken: token
