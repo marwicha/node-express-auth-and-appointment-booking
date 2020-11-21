@@ -4,11 +4,11 @@ ObjectId = mongoose.Schema.Types.ObjectId;
 const Appointment = mongoose.model(
    "Appointment",
   new mongoose.Schema({ 
-   user: { type: ObjectId, ref: 'User' },
-   prestation: String,
-   booked: Boolean,
+   user: { type: ObjectId, ref: 'User', required: true },
+   prestation: {type: String, required: true },
+   booked: { type: Boolean, default: false },
    created_at: Date,
-   slots: {type: ObjectId, ref: 'Slot'},
+   slots: { type: ObjectId, ref: 'Slot' },
 })
 )
 

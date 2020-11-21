@@ -6,20 +6,23 @@ const Role = db.role;
 
 verifyToken = (req, res, next) => {
 
-  let token = req.headers["x-access-token"];
+   const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(403).send({ message: "Aucun token fourni!" });
-  }
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
 
-  jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: "Vous n'êtes pas autorisé!" });
+        jwt.verify(token, config.secret, (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+
+            req.user = user;
+            next();
+        });
+    } else {
+        res.status(401).send({ error: 'Vous devez etre connecté afin de prendre un rendez-vous.' })
     }
-    req.userId = decoded.id;
-    next();
-  });
-};
+}
 
 isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {

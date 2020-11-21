@@ -1,6 +1,7 @@
 const db = require("../models");
 const Appointment = db.appointment;
 const Slot = db.slot
+const User = db.User
 
 
 exports.allAppointments = (req, res) => {
@@ -18,15 +19,14 @@ exports.createAppointment = async (req, res) => {
       created_at: Date.now()
     });
 
-  await newSlot.save();
-
+   await newSlot.save();
 
    const newAppointment = new Appointment({
     prestation: requestBody.prestation,
     booked: true,
-    slots: newSlot._id
+    slots: newSlot._id,
+    user: req.user.id
   });
-
 
     newAppointment.save((err, saved) => {
     if (err) {
