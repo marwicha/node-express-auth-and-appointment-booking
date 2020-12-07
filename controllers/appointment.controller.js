@@ -1,7 +1,6 @@
 const db = require("../models");
 const Appointment = db.appointment;
 const Slot = db.slot
-const User = db.User
 
 
 exports.allAppointments = (req, res) => {
