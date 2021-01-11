@@ -5,7 +5,12 @@ const Slot = db.slot
 
 exports.allAppointments = (req, res) => {
     // Returns all appointments
-    Appointment.find({}).exec((err, appointments) => res.json(appointments));
+    Appointment.find({}).populate("slots").exec((err, appointments) => res.json(appointments));
+}
+
+exports.getUserAppointments = (req, res) => {
+
+   return Appointment.find({user:req.user.id}).populate("slots").exec((err, appointments) => res.json(appointments));
 }
 
 exports.createAppointment = async (req, res) => {
@@ -15,6 +20,7 @@ exports.createAppointment = async (req, res) => {
    const newSlot = new Slot({
       slot_time: requestBody.slot_time,
       slot_date: requestBody.slot_date,
+      booked: true,
       created_at: Date.now()
     });
 
@@ -22,7 +28,6 @@ exports.createAppointment = async (req, res) => {
 
    const newAppointment = new Appointment({
     prestation: requestBody.prestation,
-    booked: true,
     slots: newSlot._id,
     user: req.user.id
   });

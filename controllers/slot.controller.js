@@ -14,6 +14,7 @@ exports.allSlots = (req, res) => {
     const newSlot = new Slot ({
       slot_time: requestBody.slot_time,
       slot_date: requestBody.slot_date,
+      booked: true,
       created_at: Date.now()
     });
 

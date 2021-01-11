@@ -6,7 +6,6 @@ const Appointment = mongoose.model(
   new mongoose.Schema({ 
    user: { type: ObjectId, ref: 'User', required: true },
    prestation: {type: String, required: true },
-   booked: { type: Boolean, default: false },
    created_at: Date,
    slots: { type: ObjectId, ref: 'Slot' },
 })

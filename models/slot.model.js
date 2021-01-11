@@ -7,6 +7,7 @@ const Slot = mongoose.model(
   new mongoose.Schema({
     slot_time: String,
     slot_date: String,
+    booked: { type: Boolean, default: false },
     created_at: Date
 })
 )
