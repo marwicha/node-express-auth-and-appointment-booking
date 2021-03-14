@@ -10,13 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  
+  app.put("/api/compte/:id", [authJwt.verifyToken], controller.update);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  app.delete("/api/compte/:id", [authJwt.verifyToken], controller.delete);
 
-  app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
-  );
 };

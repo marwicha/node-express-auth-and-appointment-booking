@@ -7,4 +7,6 @@ app.post("/api/appointment/create", [authJwt.verifyToken], controller.createAppo
 app.get("/api/appointment/all", controller.allAppointments);
 app.get("/api/appointment/:id", [authJwt.verifyToken], controller.getUserAppointments);
 
+app.delete("/api/appointment/delete/:id", [authJwt.verifyToken], controller.delete);
+
 }
