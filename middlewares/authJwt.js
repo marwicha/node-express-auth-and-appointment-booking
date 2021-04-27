@@ -5,35 +5,35 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-   const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
 
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
+    jwt.verify(token, config.secret, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
 
-        jwt.verify(token, config.secret, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-
-            req.user = user;
-            next();
-        });
-    } else {
-        res.status(401).send({ error: 'Vous devez etre connecté afin de prendre un rendez-vous.' })
-    }
-}
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).send({
+      error: "Vous devez etre connecté afin de prendre un rendez-vous.",
+    });
+  }
+};
 
 isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  User.findById(req.user.id).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
-
     Role.find(
       {
-        _id: { $in: user.roles }
+        _id: { $in: user.roles },
       },
       (err, roles) => {
         if (err) {
@@ -48,16 +48,15 @@ isAdmin = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Vous devez etre un administrateur!" });
+        res.status(403).send({ message: "Require Admin Role!" });
         return;
       }
     );
   });
 };
 
-
 const authJwt = {
   verifyToken,
-  isAdmin
+  isAdmin,
 };
 module.exports = authJwt;
