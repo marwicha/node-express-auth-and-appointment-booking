@@ -20,7 +20,7 @@ exports.createAppointment = async (req, res) => {
 
   const newSlot = new Slot({
     slot_time: requestBody.slot_time,
-    slot_date: new Date(requestBody.slot_date),
+    slot_date: requestBody.slot_date,
     created_at: Date.now(),
   });
 
