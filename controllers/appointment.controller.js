@@ -47,21 +47,26 @@ exports.createAppointment = async (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Appointment.findOneAndDelete(id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Impossible de supprimer le rendez vous!`,
+  Appointment.find({ id: id }).then((appointment) => {
+    console.log(appointment);
+    Slot.findOneAndDelete(appointment.slots).then(() => {
+      Appointment.findOneAndDelete(id)
+        .then((data) => {
+          if (!data) {
+            res.status(404).send({
+              message: `Impossible de supprimer le rendez vous!`,
+            });
+          } else {
+            res.send({
+              message: "Votre rendez vous est annulé avec succès!",
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Erreur lors de la suppression",
+          });
         });
-      } else {
-        res.send({
-          message: "Votre rendez vous est annulé avec succès!",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Erreur lors de la suppression",
-      });
     });
+  });
 };
