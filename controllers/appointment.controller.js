@@ -48,7 +48,6 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Appointment.find({ id: id }).then((appointment) => {
-    console.log(appointment);
     Slot.findOneAndDelete(appointment.slots).then(() => {
       Appointment.findOneAndDelete(id)
         .then((data) => {
