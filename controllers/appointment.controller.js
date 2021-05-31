@@ -29,7 +29,7 @@ exports.createAppointment = async (req, res) => {
   await newSlot.save();
 
   const newAppointment = new Appointment({
-    prestations: { name: requestBody.name, price: requestBody.price },
+    prestation: requestBody.prestation,
     slots: newSlot._id,
     user: req.user.id,
   });
