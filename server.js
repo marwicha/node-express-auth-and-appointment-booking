@@ -93,7 +93,7 @@ require("./routes/slot.routes")(app);
 require("./routes/payment.routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8082;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
