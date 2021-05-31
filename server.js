@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cool = require("cool-ascii-faces");
+const path = require("path");
+
 const stripe = require("stripe")(
   "sk_test_51Iv0X0Idt2OtpHpwDaOcmr14pmEEn1WUxACanIIKsJlixvQv5PMt89DzxaqQQl2u32ADnVTCSKF3WU2lMH74e94m002SMRWsMz"
 );
@@ -70,6 +73,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "IKDO project." });
 });
+
+app.get("/cool", (req, res) => res.send(cool()));
 
 // routes for auth user
 require("./routes/auth.routes")(app);
