@@ -1,32 +1,31 @@
 const db = require("../models");
-const Prestation = db.prestation;
+const Formation = db.formation;
 
-exports.allPrestations = (req, res) => {
-  Prestation.find({}).exec((err, prestations) => res.json(prestations));
-};
-
-exports.createPrestation = async (req, res) => {
+exports.addFormation = (req, res) => {
   const requestBody = req.body;
 
-  const newPrestation = new Prestation({
+  const newFormation = new Formation({
     name: requestBody.name,
-    price: requestBody.price,
+    dateText: requestBody.dateText,
   });
 
-  newPrestation.save((err, saved) => {
+  newFormation.save((err, saved) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
 
-    Prestation.findOne({ _id: saved._id }).exec((err, prestation) =>
-      res.json(prestation)
+    Formation.find({ _id: saved._id }).exec((err, formation) =>
+      res.json(formation)
     );
   });
 };
 
-// update user information
-exports.updatePrestation = (req, res) => {
+exports.allFormations = (req, res) => {
+  Formation.find({}).exec((err, formations) => res.json(formations));
+};
+
+exports.updateFormation = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
       message: "Les informations à mettre à jour ne peuvent pas être vides!",
@@ -35,7 +34,7 @@ exports.updatePrestation = (req, res) => {
 
   const id = req.params.id;
 
-  Prestation.findOneAndUpdate(id, req.body, { useFindAndModify: false })
+  Formation.findOneAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -56,15 +55,15 @@ exports.updatePrestation = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Prestation.findOneAndDelete(id)
+  Formation.findOneAndDelete(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Impossible de supprimer la prestation!`,
+          message: `Impossible de supprimer la formation!`,
         });
       } else {
         res.send({
-          message: "Prestation supprimée avec succès!",
+          message: "Formation supprimée avec succès!",
         });
       }
     })

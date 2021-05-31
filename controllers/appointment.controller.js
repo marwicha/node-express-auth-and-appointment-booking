@@ -6,12 +6,14 @@ exports.allAppointments = (req, res) => {
   // Returns all appointments
   Appointment.find({})
     .populate("slots")
+    .populate("prestations")
     .exec((err, appointments) => res.json(appointments));
 };
 
 exports.getUserAppointments = (req, res) => {
   return Appointment.find({ user: req.user.id })
     .populate("slots")
+    .populate("prestations")
     .exec((err, appointments) => res.json(appointments));
 };
 
@@ -27,7 +29,7 @@ exports.createAppointment = async (req, res) => {
   await newSlot.save();
 
   const newAppointment = new Appointment({
-    prestation: requestBody.prestation,
+    prestations: { name: requestBody.name, price: requestBody.price },
     slots: newSlot._id,
     user: req.user.id,
   });
@@ -40,6 +42,7 @@ exports.createAppointment = async (req, res) => {
 
     Appointment.find({ _id: saved._id })
       .populate("slots")
+      .populate("prestations")
       .exec((err, appointment) => res.json(appointment));
   });
 };

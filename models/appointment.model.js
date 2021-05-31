@@ -5,7 +5,12 @@ const Appointment = mongoose.model(
   "Appointment",
   new mongoose.Schema({
     user: { type: ObjectId, ref: "User", required: true },
-    prestation: { type: String, required: true },
+    prestations: [
+      {
+        type: ObjectId,
+        ref: "Prestation",
+      },
+    ],
     created_at: Date,
     slots: { type: ObjectId, ref: "Slot" },
   })

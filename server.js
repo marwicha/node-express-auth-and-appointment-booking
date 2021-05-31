@@ -1,13 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const stripe = require("stripe")(
+  "sk_test_51Iv0X0Idt2OtpHpwDaOcmr14pmEEn1WUxACanIIKsJlixvQv5PMt89DzxaqQQl2u32ADnVTCSKF3WU2lMH74e94m002SMRWsMz"
+);
 
 const app = express();
 
 const dbConfig = require("./models");
 const Role = dbConfig.role;
-
-const mongoose = require("mongoose");
 
 mongoose
   .connect(
@@ -52,11 +54,11 @@ function initial() {
   });
 }
 
-var corsOptions = {
-  origin: "http://localhost:3000",
-};
-
-app.use(cors(corsOptions));
+// var corsOptions = {
+//   origin: "http://localhost:3000",
+// };
+app.use(express.json());
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -66,7 +68,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "IKDO application." });
+  res.json({ message: "IKDO project." });
 });
 
 // routes for auth user
@@ -76,10 +78,14 @@ require("./routes/user.routes")(app);
 // routes for admin
 require("./routes/admin.routes")(app);
 require("./routes/prestation.routes")(app);
+require("./routes/formation.routes")(app);
 
 // routes for create appointnment and slots
 require("./routes/appointment.routes")(app);
 require("./routes/slot.routes")(app);
+
+// routes for payment
+require("./routes/payment.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8082;
