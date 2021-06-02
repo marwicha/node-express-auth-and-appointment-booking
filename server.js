@@ -3,11 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cool = require("cool-ascii-faces");
-const path = require("path");
-
-const stripe = require("stripe")(
-  "sk_test_51Iv0X0Idt2OtpHpwDaOcmr14pmEEn1WUxACanIIKsJlixvQv5PMt89DzxaqQQl2u32ADnVTCSKF3WU2lMH74e94m002SMRWsMz"
-);
 
 const app = express();
 
