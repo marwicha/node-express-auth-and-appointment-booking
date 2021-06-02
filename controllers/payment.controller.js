@@ -11,7 +11,7 @@ exports.payment = async (req, res) => {
     await stripe.customers.create({
       email: "marwa@gmail.com",
       phone: "25454",
-      payment_method: ["card"],
+      payment_method: "card",
       invoice_settings: {
         default_payment_method: "pm_card_visa",
       },
