@@ -31,8 +31,14 @@ exports.payment = async (req, res) => {
       { idempontencyKey }
     );
 
-    res.json({ message: "Payment Successful", success: true });
+    res.json({
+      message: "Payment Successful",
+      success: true,
+    });
   } catch (err) {
-    res.status(400).json({ error: { message: err.message } });
+    res.json({
+      message: "Payment Failed",
+      success: false,
+    });
   }
 };
