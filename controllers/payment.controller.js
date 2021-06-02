@@ -15,7 +15,7 @@ exports.payment = async (req, res) => {
       invoice_settings: {
         default_payment_method: "pm_card_visa",
       },
-      preferred_locales: "fr",
+      preferred_locales: ["fr"],
     });
 
     const paymentIntent = stripe.paymentIntents.create(
