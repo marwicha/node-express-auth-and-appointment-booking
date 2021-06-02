@@ -5,7 +5,7 @@ const stripe = require("stripe")(
 );
 
 exports.payment = async (req, res) => {
-  const { token } = req.body;
+  const { id } = req.body;
   const idempontencyKey = uuidv4();
   try {
     const paymentIntent = stripe.paymentIntents.create(
