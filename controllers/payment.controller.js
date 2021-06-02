@@ -8,19 +8,13 @@ exports.payment = async (req, res) => {
   const { token } = req.body;
   const idempontencyKey = uuidv4();
   try {
-    await stripe.customers.create({
-      email: "marwa@gmail.com",
-      phone: "25454",
-      invoice_settings: {
-        default_payment_method: "pm_card_visa",
-      },
-      preferred_locales: ["fr"],
-    });
-
     const paymentIntent = stripe.paymentIntents.create(
       {
         amount: "1000",
         currency: "eur",
+        description: "Your Company Description",
+        payment_method: id,
+        confirm: true,
         //customer: customer.id,
         //description: "okkkkk",
         // billing_details: {
@@ -37,7 +31,7 @@ exports.payment = async (req, res) => {
       { idempontencyKey }
     );
 
-    res.json({ clientSecret: paymentIntent.client_secret });
+    res.json({ message: "Payment Successful", success: true });
   } catch (err) {
     res.status(400).json({ error: { message: err.message } });
   }
