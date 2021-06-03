@@ -11,10 +11,6 @@ exports.payment = async (req, res) => {
     payment_method_types: [paymentMethodType],
     currency: currency,
     amount: 2222,
-    invoice_settings: {
-      default_payment_method: "pm_card_visa",
-    },
-    preferred_locales: "fr",
   };
 
   try {
