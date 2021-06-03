@@ -1,6 +1,4 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2021-06-15",
-});
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.payment = async (req, res) => {
   const { paymentMethodType, currency } = req.body;
