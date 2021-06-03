@@ -1,17 +1,16 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.payment = async (req, res) => {
-  const { paymentMethodType, currency } = req.body;
+  const { paymentMethodType, currency, amount } = req.body;
 
   const params = {
     payment_method_types: [paymentMethodType],
     currency: currency,
-    amount: 2222,
+    amount: amount * 100,
   };
 
   try {
     const paymentIntent = await stripe.paymentIntents.create(params);
-
     //   {
     //     amount: "1000",
     //     currency: "eur",
