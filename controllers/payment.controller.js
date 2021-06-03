@@ -5,40 +5,47 @@ const stripe = require("stripe")(
 );
 
 exports.payment = async (req, res) => {
-  const { token } = req.body;
+  const { paymentMethodType, currency } = req.body;
+
+  const params = {
+    payment_method_types: [paymentMethodType],
+    currency: currency,
+    amout: 2222,
+    invoice_settings: {
+      default_payment_method: "pm_card_visa",
+    },
+    preferred_locales: "fr",
+  };
 
   try {
-    stripe.customers
-      .create({
-        email: token.email,
-        source: token.id,
-      })
-      .then((customer) => {
-        stripe.charges.create({
-          id: customer.id,
-          amount: "1000",
-          currency: "eur",
-          description: "Your Company Description",
-        });
-      })
-      .then((result) => res.status(200).send(result));
+    const paymentIntent = await stripe.paymentIntents.create(params);
 
-    //customer: customer.id,
-    //description: "okkkkk",
-    // billing_details: {
-    //   email: token.email,
-    //   phone: token.phone,
-    // },
-    // shipping: {
-    //   name: token.card.name,
-    //   address: {
-    //     country: token.card.address_country,
+    //   {
+    //     amount: "1000",
+    //     currency: "eur",
+    //     //customer: customer.id,
+    //     //description: "okkkkk",
+    //     // billing_details: {
+    //     //   email: token.email,
+    //     //   phone: token.phone,
+    //     // },
+    //     // shipping: {
+    //     //   name: token.card.name,
+    //     //   address: {
+    //     //     country: token.card.address_country,
+    //     //   },
+    //     // },
     //   },
-    // },
-  } catch (err) {
-    res.json({
-      message: "Payment Failed",
-      success: false,
+
+    // Send publishable key and PaymentIntent details to client
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (e) {
+    return res.status(400).send({
+      error: {
+        message: e.message,
+      },
     });
   }
 };
