@@ -5,36 +5,36 @@ const stripe = require("stripe")(
 );
 
 exports.payment = async (req, res) => {
-  const { id } = req.body;
-  const idempontencyKey = uuidv4();
-  try {
-    const paymentIntent = stripe.paymentIntents.create(
-      {
-        amount: "1000",
-        currency: "eur",
-        description: "Your Company Description",
-        payment_method: id,
-        confirm: true,
-        //customer: customer.id,
-        //description: "okkkkk",
-        // billing_details: {
-        //   email: token.email,
-        //   phone: token.phone,
-        // },
-        // shipping: {
-        //   name: token.card.name,
-        //   address: {
-        //     country: token.card.address_country,
-        //   },
-        // },
-      },
-      { idempontencyKey }
-    );
+  const { token } = req.body;
 
-    res.json({
-      message: "Payment Successful",
-      success: true,
-    });
+  try {
+    stripe.customers
+      .create({
+        email: token.email,
+        source: token.id,
+      })
+      .then((customer) => {
+        stripe.charges.create({
+          id: customer.id,
+          amount: "1000",
+          currency: "eur",
+          description: "Your Company Description",
+        });
+      })
+      .then((result) => res.status(200).send(result));
+
+    //customer: customer.id,
+    //description: "okkkkk",
+    // billing_details: {
+    //   email: token.email,
+    //   phone: token.phone,
+    // },
+    // shipping: {
+    //   name: token.card.name,
+    //   address: {
+    //     country: token.card.address_country,
+    //   },
+    // },
   } catch (err) {
     res.json({
       message: "Payment Failed",
