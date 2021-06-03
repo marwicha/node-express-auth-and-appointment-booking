@@ -10,7 +10,7 @@ exports.payment = async (req, res) => {
   const params = {
     payment_method_types: [paymentMethodType],
     currency: currency,
-    amout: 2222,
+    amount: 2222,
     invoice_settings: {
       default_payment_method: "pm_card_visa",
     },
