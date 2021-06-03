@@ -87,6 +87,12 @@ require("./routes/slot.routes")(app);
 // routes for payment
 require("./routes/payment.routes")(app);
 
+app.get("/config", (req, res) => {
+  res.send({
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+  });
+});
+
 // set port, listen for requests
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

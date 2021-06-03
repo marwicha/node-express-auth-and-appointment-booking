@@ -1,8 +1,6 @@
-const { v4: uuidv4 } = require("uuid");
-
-const stripe = require("stripe")(
-  "sk_test_51Iv0X0Idt2OtpHpwDaOcmr14pmEEn1WUxACanIIKsJlixvQv5PMt89DzxaqQQl2u32ADnVTCSKF3WU2lMH74e94m002SMRWsMz"
-);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2021-06-15",
+});
 
 exports.payment = async (req, res) => {
   const { paymentMethodType, currency } = req.body;
