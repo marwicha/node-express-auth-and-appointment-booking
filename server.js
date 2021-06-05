@@ -52,11 +52,12 @@ function initial() {
   });
 }
 
-// var corsOptions = {
-//   origin: "http://localhost:3000",
-// };
+var corsOptions = {
+  origin: "http://localhost:3000",
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
