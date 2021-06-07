@@ -2,23 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const sendGridMail = require("@sendgrid/mail");
-sendGridMail.setApiKey(`${process.env.SENDGRID_API_KEY}`);
 const app = express();
+
+const sendGridMail = require("@sendgrid/mail").setApiKey(
+  process.env.SENDGRID_API_KEY
+);
 
 const dbConfig = require("./models");
 const Role = dbConfig.role;
-
-function getMessage() {
-  const body = "This is a test email using SendGrid from Node.js";
-  return {
-    to: "marwa.rekik.pro@gmail.com",
-    from: "marwa.rekik.pro@gmail.com",
-    subject: "Test email with Node.js and SendGrid",
-    text: body,
-    html: `<strong>${body}</strong>`,
-  };
-}
 
 mongoose
   .connect(
@@ -77,20 +68,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // simple route
-app.get("/", async (req, res) => {
-  try {
-    await sendGridMail.send(getMessage());
-    console.log("Test email sent successfully");
-  } catch (error) {
-    console.error("Error sending test email");
-    console.error(error);
-    if (error.response) {
-      console.error(error.response.body);
-    }
-  }
+app.get("/", (req, res) => {
+  const body = "This is a test email using SendGrid from Node.js";
+  const msg = {
+    to: "marwa.rekik.pro@gmail.com",
+    from: "marwa.rekik.pro@gmail.com",
+    subject: "Test email with Node.js and SendGrid",
+    text: body,
+    html: `<strong>${body}</strong>`,
+  };
 
-  //res.json({ message: "IKDO project." });
+  sendGridMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
+
+//res.json({ message: "IKDO project." });
 
 app.get("/cool", (req, res) => res.send(cool()));
 
