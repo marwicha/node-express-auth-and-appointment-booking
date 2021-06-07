@@ -2,6 +2,10 @@ const db = require("../models");
 const Appointment = db.appointment;
 const Slot = db.slot;
 
+require("dotenv").config();
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 exports.allAppointments = (req, res) => {
   // Returns all appointments
   Appointment.find({})
@@ -47,6 +51,16 @@ exports.createAppointment = async (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
+  const body =
+    "Rendez vous annulé Vous recevrer un remboursement sous quelques jours";
+  const msg = {
+    to: "marwa.rekik.pro@gmail.com",
+    from: "marwa.rekik.pro@gmail.com",
+    subject: "Rendez vous annulé",
+    text: body,
+    html: `<strong>${body}</strong>`,
+  };
+
   Appointment.find({ id: id }).then((appointment) => {
     Slot.findOneAndDelete(appointment.slots).then(() => {
       Appointment.findOneAndDelete(id)
@@ -59,6 +73,14 @@ exports.delete = (req, res) => {
             res.send({
               message: "Votre rendez vous est annulé avec succès!",
             });
+            sendGridMail
+              .send(msg)
+              .then(() => {
+                console.log("Email sent");
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           }
         })
         .catch((err) => {
