@@ -3,10 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
-
-const sendGridMail = require("@sendgrid/mail").setApiKey(
-  process.env.SENDGRID_API_KEY
-);
+require("dotenv").config();
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const dbConfig = require("./models");
 const Role = dbConfig.role;
