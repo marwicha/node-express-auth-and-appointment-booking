@@ -86,8 +86,6 @@ app.get("/", (req, res) => {
 
 //res.json({ message: "IKDO project." });
 
-app.get("/cool", (req, res) => res.send(cool()));
-
 // routes for auth user
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);

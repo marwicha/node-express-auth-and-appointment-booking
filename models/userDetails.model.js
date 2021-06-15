@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 ObjectId = mongoose.Schema.Types.ObjectId;
 
-const User = mongoose.model(
-  "User",
+const userDetails = mongoose.model(
+  "userDetails",
   new mongoose.Schema({
     name: { type: String, unique: true, required: true, trim: true },
     phone: { type: Number, required: true },
@@ -18,4 +18,4 @@ const User = mongoose.model(
   })
 );
 
-module.exports = User;
+module.exports = userDetails;

@@ -1,8 +1,8 @@
-const User = require("../models/User.model");
-const Token = require("../models/Token.model");
-const sendEmail = require("../utils/email/sendEmail");
+const User = require("../models/userDetails.model");
+const Token = require("../models/tokens.model");
+const sendEmail = require("../utils/sendEmails");
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const clientURL = process.env.CLIENT_URL;
 

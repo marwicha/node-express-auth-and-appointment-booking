@@ -18,9 +18,10 @@ module.exports = function (app) {
 
   app.post("/api/auth/signin", controller.signin);
 
-  app.post("/api/auth/reset-request", controller.requestPasswordReset);
   app.post(
-    "/api/auth/reset-password",
+    "/api/auth/reset-request",
     controller.resetPasswordRequestController
   );
+
+  app.post("/api/auth/reset-password", controller.resetPasswordController);
 };

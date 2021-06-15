@@ -8,6 +8,11 @@ var jwt = require("jsonwebtoken");
 const JWTSecret = process.env.JWT_SECRET;
 var bcrypt = require("bcryptjs");
 
+const {
+  requestPasswordReset,
+  resetPassword,
+} = require("../services/auth.service");
+
 exports.signup = async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) {
