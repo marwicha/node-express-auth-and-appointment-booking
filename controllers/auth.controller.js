@@ -11,10 +11,11 @@ var bcrypt = require("bcryptjs");
 exports.signup = async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) {
-    throw new Error("Email already exist", 422);
+    throw new Error("Email existe déjà", 422);
   }
 
   user = new User(req.body);
+  const token = JWT.sign({ id: user._id }, JWTSecret);
 
   user.save((err, user) => {
     if (err) {
@@ -68,7 +69,7 @@ exports.signup = async (req, res) => {
     phone: req.body.phone,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-    token: jwt.sign({ id: user.id }, JWTSecret),
+    token: token,
   };
 };
 
@@ -118,4 +119,20 @@ exports.signin = (req, res) => {
         accessToken: token,
       });
     });
+};
+
+exports.resetPasswordRequestController = async (req, res, next) => {
+  const requestPasswordResetService = await requestPasswordReset(
+    req.body.email
+  );
+  return res.json(requestPasswordResetService);
+};
+
+exports.resetPasswordController = async (req, res, next) => {
+  const resetPasswordService = await resetPassword(
+    req.body.userId,
+    req.body.token,
+    req.body.password
+  );
+  return res.json(resetPasswordService);
 };
