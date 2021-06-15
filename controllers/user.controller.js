@@ -1,5 +1,5 @@
 const db = require("../models");
-const User = db.user;
+const User = db.userDetails;
 const Appointment = db.appointment;
 
 // update user information

@@ -1,6 +1,6 @@
 const config = require("../config/auth.config");
 const db = require("../models");
-const User = db.user;
+const User = db.userDetails;
 const Role = db.role;
 
 var jwt = require("jsonwebtoken");
@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
   }
 
   user = new User(req.body);
-  const token = JWT.sign({ id: user._id }, JWTSecret);
+  const token = jwt.sign({ id: user._id }, JWTSecret);
 
   user.save((err, user) => {
     if (err) {
