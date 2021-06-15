@@ -7,6 +7,8 @@ exports.addFormation = (req, res) => {
   const newFormation = new Formation({
     name: requestBody.name,
     dateText: requestBody.dateText,
+    description: requestBody.description,
+    prix: requestBody.prix,
   });
 
   newFormation.save((err, saved) => {

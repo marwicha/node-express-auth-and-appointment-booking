@@ -11,6 +11,7 @@ db.appointment = require("./appointment.model");
 db.slot = require("./slot.model");
 db.prestation = require("./prestation.model");
 db.formation = require("./formation.model");
+db.token = require("./token.model");
 db.ROLES = ["user", "admin"];
 
 module.exports = db;

@@ -3,18 +3,18 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
-
+require("dotenv").config();
 const dbConfig = require("./models");
 const Role = dbConfig.role;
 
+let DB_URL = process.env.DB_URL;
+
 mongoose
-  .connect(
-    `mongodb+srv://marwa:mriwa654@auth-node.cpcsm.gcp.mongodb.net/ikdo?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();

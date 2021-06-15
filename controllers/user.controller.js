@@ -1,10 +1,6 @@
 const db = require("../models");
 const User = db.user;
 const Appointment = db.appointment;
-const Slot = db.slot;
-
-// BCYPT PASSWORD
-var bcrypt = require("bcryptjs");
 
 // update user information
 exports.update = (req, res) => {
@@ -18,9 +14,8 @@ exports.update = (req, res) => {
   const reqBody = {
     name: req.body.name,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-    phone: req.body.phone
-  }
+    phone: req.body.phone,
+  };
 
   User.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
     .then((data) => {

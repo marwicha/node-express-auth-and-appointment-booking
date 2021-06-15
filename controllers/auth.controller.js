@@ -4,15 +4,17 @@ const User = db.user;
 const Role = db.role;
 
 var jwt = require("jsonwebtoken");
+
+const JWTSecret = process.env.JWT_SECRET;
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
-  const user = new User({
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-  });
+exports.signup = async (req, res) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (user) {
+    throw new Error("Email already exist", 422);
+  }
+
+  user = new User(req.body);
 
   user.save((err, user) => {
     if (err) {
@@ -61,6 +63,13 @@ exports.signup = (req, res) => {
       });
     }
   });
+  return {
+    name: req.body.name,
+    phone: req.body.phone,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+    token: jwt.sign({ id: user.id }, JWTSecret),
+  };
 };
 
 exports.signin = (req, res) => {
@@ -104,7 +113,7 @@ exports.signin = (req, res) => {
         name: user.name,
         phone: user.phone,
         email: user.email,
-        password:user.password,
+        password: user.password,
         roles: authorities,
         accessToken: token,
       });
