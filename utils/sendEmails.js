@@ -9,6 +9,7 @@ const sendEmail = async (email, subject, payload, template) => {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
+      service: "gmail",
       port: 465,
       auth: {
         user: testAccount.user,
