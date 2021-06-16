@@ -34,7 +34,7 @@ const requestPasswordReset = async (email) => {
   };
 
   const msg = {
-    to: user.email,
+    to: email,
     from: "marwa.rekik.pro@gmail.com",
     subject: "changement mot de passe",
     templateId: templates[test],
