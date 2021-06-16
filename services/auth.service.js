@@ -4,6 +4,8 @@ const sendEmail = require("../utils/sendEmails");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const clientURL = process.env.CLIENT_URL;
 
 const requestPasswordReset = async (email) => {
@@ -27,16 +29,28 @@ const requestPasswordReset = async (email) => {
 
   const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
 
-  sendEmail(
-    user.email,
-    "Password Reset Request",
-    {
-      name: user.name,
-      link: link,
+  const templates = {
+    test: "d-369d35cfcc1c43e8966f24dfece375ae",
+  };
+
+  const msg = {
+    to: user.email,
+    from: "marwa.rekik.pro@gmail.com",
+    subject: "changement mot de passe",
+    templateId: templates[test],
+    dynamic_template_data: {
+      reset_password_url: link,
     },
-    "./template/requestResetPassword.handlebars"
-  );
-  return link;
+  };
+
+  sendGridMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 const resetPassword = async (userId, token, password) => {

@@ -23,5 +23,5 @@ module.exports = function (app) {
     controller.resetPasswordRequestController
   );
 
-  app.post("/api/auth/reset-password", controller.resetPasswordController);
+  app.put("/api/auth/reset-password", controller.resetPasswordController);
 };
