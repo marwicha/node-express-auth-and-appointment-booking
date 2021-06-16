@@ -51,8 +51,6 @@ const requestPasswordReset = async (email) => {
     .catch((error) => {
       console.error(error);
     });
-
-  return link;
 };
 
 const resetPassword = async (userId, token, password) => {

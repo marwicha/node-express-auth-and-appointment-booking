@@ -19,7 +19,7 @@ module.exports = function (app) {
   app.post("/api/auth/signin", controller.signin);
 
   app.post(
-    "/api/auth/reset-request/:email",
+    "/api/auth/reset-request",
     controller.resetPasswordRequestController
   );
 
