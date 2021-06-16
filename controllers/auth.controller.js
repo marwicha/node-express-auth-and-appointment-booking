@@ -130,7 +130,7 @@ exports.resetPasswordRequestController = async (req, res, next) => {
   const requestPasswordResetService = await requestPasswordReset(
     req.body.email
   );
-  console.log(requestPasswordResetService);
+  console.log(res.json(requestPasswordResetService));
   return res.json(requestPasswordResetService);
 };
 

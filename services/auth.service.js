@@ -34,13 +34,17 @@ const requestPasswordReset = async (email) => {
   };
 
   const msg = {
-    to: email,
     from: "marwa.rekik.pro@gmail.com",
     subject: "changement mot de passe",
-    templateId: templates[test],
-    dynamic_template_data: {
-      reset_password_url: link,
-    },
+    templateId: templates.test,
+    personalizations: [
+      {
+        to: [{ email: email }],
+        dynamic_template_data: {
+          link: link,
+        },
+      },
+    ],
   };
 
   sendGridMail
