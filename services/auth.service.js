@@ -11,7 +11,7 @@ const clientURL = process.env.CLIENT_URL;
 const requestPasswordReset = async (email) => {
   const user = await User.findOne({ email });
 
-  if (!user) throw new Error("Email does not exist");
+  //if (!user) throw new Error("Email does not exist");
 
   let token = await Token.findOne({ userId: user._id });
 
@@ -55,9 +55,10 @@ const requestPasswordReset = async (email) => {
       });
     })
     .catch((error) => {
-      return res.status(400).send({
-        message: error,
-      });
+      if (!user)
+        return res.status(400).send({
+          message: "Email n'existe pas",
+        });
     });
 };
 
