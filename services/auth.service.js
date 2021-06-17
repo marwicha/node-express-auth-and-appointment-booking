@@ -8,6 +8,11 @@ const sendGridMail = require("@sendgrid/mail");
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const clientURL = process.env.CLIENT_URL;
 
+const templates = {
+  resetPasswordRequest: "d-369d35cfcc1c43e8966f24dfece375ae",
+  resetPassword: "d-34e7e6712a9840d0ba5e5c37d9d26df0",
+};
+
 const requestPasswordReset = async (email) => {
   const user = await User.findOne({ email });
 
@@ -29,13 +34,9 @@ const requestPasswordReset = async (email) => {
 
   const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
 
-  const templates = {
-    test: "d-369d35cfcc1c43e8966f24dfece375ae",
-  };
-
   const msg = {
     from: "marwa.rekik.pro@gmail.com",
-    templateId: templates.test,
+    templateId: templates.resetPasswordRequest,
     personalizations: [
       {
         to: [{ email: email }],
@@ -55,10 +56,11 @@ const requestPasswordReset = async (email) => {
       });
     })
     .catch((error) => {
-      if (!user)
-        return res.status(400).send({
+      if (!user) {
+        return res.status(404).send({
           message: "Email n'existe pas",
         });
+      }
     });
 };
 
@@ -85,14 +87,33 @@ const resetPassword = async (userId, token, password) => {
 
   const user = await User.findById({ _id: userId });
 
-  sendEmail(
-    user.email,
-    "Password Reset Successfully",
-    {
-      name: user.name,
-    },
-    "./template/resetPassword.handlebars"
-  );
+  // sendEmail(
+  //   user.email,
+  //   "Password Reset Successfully",
+  //   {
+  //     name: user.name,
+  //   },
+  //   "./template/resetPassword.handlebars"
+  // );
+
+  const msg = {
+    from: "marwa.rekik.pro@gmail.com",
+    templateId: templates.resetPassword,
+    personalizations: [
+      {
+        to: [{ email: user.email }],
+      },
+    ],
+  };
+
+  sendGridMail
+    .send(msg)
+    .then(() => {
+      console.log("Email for password change sent");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   await passwordResetToken.deleteOne();
 
