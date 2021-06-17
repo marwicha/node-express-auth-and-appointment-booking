@@ -35,7 +35,6 @@ const requestPasswordReset = async (email) => {
 
   const msg = {
     from: "marwa.rekik.pro@gmail.com",
-    subject: "changement mot de passe",
     templateId: templates.test,
     personalizations: [
       {
@@ -49,11 +48,16 @@ const requestPasswordReset = async (email) => {
 
   sendGridMail
     .send(msg)
-    .then(() => {
+    .then((res) => {
       console.log("Email sent");
+      return res.status(201).send({
+        message: "E-mail de réinitialisation de mot de passe envoyé!",
+      });
     })
     .catch((error) => {
-      console.error(error);
+      return res.status(400).send({
+        message: error,
+      });
     });
 };
 
