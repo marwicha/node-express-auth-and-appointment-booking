@@ -14,13 +14,12 @@ const {
 } = require("../services/auth.service");
 
 exports.signup = async (req, res) => {
-  let user = await User.findOne({ email: req.body.email });
-  if (user) {
-    throw new Error("Email existe déjà", 422);
-  }
-
-  user = new User(req.body);
-  const token = jwt.sign({ id: user._id }, JWTSecret);
+  const user = new User({
+    name: req.body.name,
+    phone: req.body.phone,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+  });
 
   user.save((err, user) => {
     if (err) {
@@ -69,13 +68,6 @@ exports.signup = async (req, res) => {
       });
     }
   });
-  return {
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-    token: token,
-  };
 };
 
 exports.signin = (req, res) => {
