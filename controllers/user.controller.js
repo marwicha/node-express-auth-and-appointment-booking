@@ -35,12 +35,8 @@ exports.update = (req, res) => {
     });
 };
 
-exports.deleteUserAndAppointments = (req, res) => {
-  return Appointment.find({ user: req.user.id }).then((appointment) => {
-    User.findOneAndDelete(appointment.user).then(() => {
-      Appointment.findOneAndDelete({ appointment: appointment._id });
-    });
-  });
+exports.deleteUserAndAppointments = async (req, res) => {
+  return Appointment.remove({ user: req.user.id });
 };
 
 exports.adminBoard = (req, res) => {

@@ -5,10 +5,10 @@ ObjectId = mongoose.Schema.Types.ObjectId;
 const userDetails = mongoose.model(
   "userDetails",
   new mongoose.Schema({
-    name: { type: String, unique: true, required: true, trim: true },
-    phone: { type: Number, required: true },
-    email: { type: String, trim: true, unique: true, required: true },
-    password: { type: String },
+    name: String,
+    phone: Number,
+    email: String,
+    password: String,
     roles: [
       {
         type: ObjectId,
