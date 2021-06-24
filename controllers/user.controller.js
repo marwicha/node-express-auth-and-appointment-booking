@@ -39,6 +39,7 @@ exports.update = (req, res) => {
 exports.deleteUserAndAppointments = async (req, res) => {
   await Appointment.remove({ user: req.user.id });
   await Slot.remove({ user: req.user.id });
+  await User.remove({ user: req.user.id });
 
   return res.json({ message: "ok" });
 };
