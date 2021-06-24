@@ -18,7 +18,7 @@ module.exports = function (app) {
 
   app.put("/api/compte/:id", [authJwt.verifyToken], controller.update);
 
-  app.get(
+  app.delete(
     "/api/compte/:id",
     [authJwt.verifyToken],
     controller.deleteUserAndAppointments
