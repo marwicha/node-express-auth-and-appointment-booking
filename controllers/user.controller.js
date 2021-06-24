@@ -39,9 +39,8 @@ exports.update = (req, res) => {
 exports.deleteUserAndAppointments = async (req, res) => {
   await Appointment.remove({ user: req.user.id });
   await Slot.remove({ user: req.user.id });
-  // const slots = await Slot.find({ slots: appointments.slots.id });
+
   return res.json({ message: "ok" });
-  // console.log(slots);
 };
 
 exports.adminBoard = (req, res) => {

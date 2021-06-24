@@ -13,5 +13,5 @@ db.prestation = require("./prestation.model");
 db.formation = require("./formation.model");
 db.tokens = require("./tokens.model");
 db.ROLES = ["user", "admin"];
-
+  
 module.exports = db;
