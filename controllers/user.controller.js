@@ -1,6 +1,7 @@
 const db = require("../models");
 const User = db.userDetails;
 const Appointment = db.appointment;
+const Slot = db.slot;
 
 // update user information
 exports.update = (req, res) => {
@@ -36,7 +37,12 @@ exports.update = (req, res) => {
 };
 
 exports.deleteUserAndAppointments = async (req, res) => {
-  return Appointment.remove({ user: req.user.id });
+  return Appointment.find({ user: req.user.id })
+    .populate("slots")
+    .exec((err, appointments) => console.log(appointments));
+  // const slots = await Slot.find({ slots: appointments.slots.id });
+
+  // console.log(slots);
 };
 
 exports.adminBoard = (req, res) => {

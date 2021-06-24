@@ -26,6 +26,7 @@ exports.createAppointment = async (req, res) => {
     slot_time: requestBody.slot_time,
     slot_date: requestBody.slot_date,
     created_at: Date.now(),
+    user: req.user.id,
   });
 
   await newSlot.save();
