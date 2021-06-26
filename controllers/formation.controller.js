@@ -1,5 +1,6 @@
 const db = require("../models");
 const Formation = db.formation;
+const User = db.user;
 require("dotenv").config();
 const sendGridMail = require("@sendgrid/mail");
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -9,7 +10,7 @@ const templates = {
   formationAdded: "d-5189025449c147c8ad47ac8cd6aff15e",
 };
 
-exports.addFormation = (req, res) => {
+exports.addFormation = async (req, res) => {
   const requestBody = req.body;
 
   const newFormation = new Formation({
@@ -27,25 +28,29 @@ exports.addFormation = (req, res) => {
 
     const emailPatrick = "marwa.rekik.pro@gmail.com";
 
-    const workshopAdded = {
+    const allUsers = await User.find({}).exec((err, user) => res.json(user));
+
+    const workshopAddedMessage = allUsers.map((user) => ({
       from: `Equipe IKDO <${emailPatrick}>`,
       templateId: templates.formationAdded,
       personalizations: [
         {
-          to: [{ email: emailPatrick }],
-          body: "HELLO",
+          to: [{ email: user.email }],
+          dynamic_template_data: {
+            name: saved.name,
+            date: saved.dateText,
+            description: saved.description,
+            prix: saved.prix,
+          },
         },
       ],
-    };
+    }));
 
-    sendGridMail
-      .send(workshopAdded)
-      .then((res) => {
-        console.log("Email sent");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const promises = workshopAddedMessage.map((message) =>
+      sendGridMail.send(message)
+    );
+
+    await Promise.all(promises);
 
     Formation.find({ _id: saved._id }).exec((err, formation) =>
       res.json(formation)
