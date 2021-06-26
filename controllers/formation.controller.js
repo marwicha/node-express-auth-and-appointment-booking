@@ -87,7 +87,7 @@ exports.updateFormation = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Formation.findOneAndDelete(id)
+  Formation.findOneAndDelete({ _id: id })
     .then((data) => {
       if (!data) {
         res.status(404).send({

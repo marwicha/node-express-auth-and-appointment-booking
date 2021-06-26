@@ -1,6 +1,7 @@
 const db = require("../models");
 const Appointment = db.appointment;
 const Slot = db.slot;
+const User = db.user;
 
 require("dotenv").config();
 const sendGridMail = require("@sendgrid/mail");
@@ -27,6 +28,7 @@ exports.getUserAppointments = (req, res) => {
 
 exports.createAppointment = async (req, res) => {
   const requestBody = req.body;
+  const user = await User.findById(req.user.id);
 
   const emailPatrick = "marwa.rekik.pro@gmail.com";
 
@@ -35,7 +37,7 @@ exports.createAppointment = async (req, res) => {
     templateId: templates.rendezvousConfirmed,
     personalizations: [
       {
-        to: [{ email: req.user.email }],
+        to: [{ email: user.email }],
       },
     ],
   };
@@ -44,7 +46,7 @@ exports.createAppointment = async (req, res) => {
     slot_time: requestBody.slot_time,
     slot_date: requestBody.slot_date,
     created_at: Date.now(),
-    user: req.user.id,
+    user: user.id,
   });
 
   await newSlot.save();
@@ -52,7 +54,7 @@ exports.createAppointment = async (req, res) => {
   const newAppointment = new Appointment({
     prestation: requestBody.prestation,
     slots: newSlot._id,
-    user: req.user.id,
+    user: user.id,
   });
 
   newAppointment.save((err, saved) => {
@@ -76,49 +78,37 @@ exports.createAppointment = async (req, res) => {
   });
 };
 
-exports.delete = (req, res) => {
-  const id = req.params.id;
-
+exports.delete = async (req, res) => {
   const emailPatrick = "marwa.rekik.pro@gmail.com";
 
-  Appointment.find({ id: id }).then((appointment) => {
-    Slot.findOneAndDelete(appointment.slots).then(() => {
-      Appointment.findOneAndDelete(id)
-        .then((data) => {
-          if (!data) {
-            res.status(404).send({
-              message: `Impossible de supprimer le rendez vous!`,
-            });
-          } else {
-            res.send({
-              message: "Votre rendez vous est annulé avec succès!",
-            });
+  const appointment = await Appointment.findById(req.params.id);
+  const slot = await Slot.findById(appointment.slots);
 
-            const msgRVCancelled = {
-              from: `Equipe IKDO <${emailPatrick}>`,
-              templateId: templates.rendezvousCancelled,
-              personalizations: [
-                {
-                  to: [{ email: appointment.user.email }],
-                },
-              ],
-            };
+  await Slot.findOneAndDelete({ _id: slot._id });
 
-            sendGridMail
-              .send(msgRVCancelled)
-              .then((res) => {
-                console.log("Email sent");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: "Erreur lors de la suppression",
-          });
-        });
+  await Appointment.findOneAndDelete({ _id: req.params.id });
+
+  const user = await User.findById(appointment.user);
+
+  const msgRVCancelled = {
+    from: `Equipe IKDO <${emailPatrick}>`,
+    templateId: templates.rendezvousCancelled,
+    personalizations: [
+      {
+        to: [{ email: user.email }],
+      },
+    ],
+  };
+
+  sendGridMail
+    .send(msgRVCancelled)
+    .then((res) => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.log(error);
     });
+  res.send({
+    message: "Votre rendez vous est annulé avec succès!",
   });
 };

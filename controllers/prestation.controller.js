@@ -56,7 +56,7 @@ exports.updatePrestation = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Prestation.findOneAndDelete(id)
+  Prestation.findOneAndDelete({ _id: id })
     .then((data) => {
       if (!data) {
         res.status(404).send({
