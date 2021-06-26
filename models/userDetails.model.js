@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userDetails = mongoose.model(
-  "userDetails",
+  "user",
   new mongoose.Schema({
     name: String,
     phone: Number,

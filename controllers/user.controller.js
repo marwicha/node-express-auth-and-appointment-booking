@@ -1,5 +1,5 @@
 const db = require("../models");
-const User = db.userDetails;
+const User = db.user;
 const Appointment = db.appointment;
 const Slot = db.slot;
 
