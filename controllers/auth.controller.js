@@ -70,10 +70,11 @@ exports.signup = async (req, res) => {
             return;
           }
 
+          res.send({ message: "Vous êtes enregistré avec success!" });
           const emailPatrick = "marwa.rekik.pro@gmail.com";
 
           const msgInscription = {
-            subject: `Ravi de faire votre connaissance, ${user.name}`,
+            subject: "Ravi de faire votre connaissance",
             from: `Equipe IKDO <${emailPatrick}>`,
             templateId: templates.inscription,
             personalizations: [
@@ -91,8 +92,6 @@ exports.signup = async (req, res) => {
             .catch((error) => {
               console.log(error);
             });
-
-          res.send({ message: "Vous êtes enregistré avec success!" });
         });
       });
     }

@@ -6,6 +6,12 @@ require("dotenv").config();
 const sendGridMail = require("@sendgrid/mail");
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+//Templates from sendGrid account
+const templates = {
+  rendezvousConfirmed: "d-07dd92f729b6434794bb3ed6cfff85e0",
+  rendezvousCancelled: "d-e1ba2bd0352f4c62a860a5a54bf2723c",
+};
+
 exports.allAppointments = (req, res) => {
   // Returns all appointments
   Appointment.find({})
@@ -21,6 +27,18 @@ exports.getUserAppointments = (req, res) => {
 
 exports.createAppointment = async (req, res) => {
   const requestBody = req.body;
+
+  const emailPatrick = "marwa.rekik.pro@gmail.com";
+
+  const msgRVConfirmed = {
+    from: `Equipe IKDO <${emailPatrick}>`,
+    templateId: templates.rendezvousConfirmed,
+    personalizations: [
+      {
+        to: [{ email: req.user.email }],
+      },
+    ],
+  };
 
   const newSlot = new Slot({
     slot_time: requestBody.slot_time,
@@ -43,6 +61,15 @@ exports.createAppointment = async (req, res) => {
       return;
     }
 
+    sendGridMail
+      .send(msgRVConfirmed)
+      .then((res) => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     Appointment.find({ _id: saved._id })
       .populate("slots")
       .exec((err, appointment) => res.json(appointment));
@@ -52,15 +79,7 @@ exports.createAppointment = async (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  const body =
-    "Rendez vous annulé Vous recevrer un remboursement sous quelques jours";
-  const msg = {
-    to: "marwa.rekik.pro@gmail.com",
-    from: "marwa.rekik.pro@gmail.com",
-    subject: "Rendez vous annulé",
-    text: body,
-    html: `<strong>${body}</strong>`,
-  };
+  const emailPatrick = "marwa.rekik.pro@gmail.com";
 
   Appointment.find({ id: id }).then((appointment) => {
     Slot.findOneAndDelete(appointment.slots).then(() => {
@@ -74,13 +93,24 @@ exports.delete = (req, res) => {
             res.send({
               message: "Votre rendez vous est annulé avec succès!",
             });
+
+            const msgRVCancelled = {
+              from: `Equipe IKDO <${emailPatrick}>`,
+              templateId: templates.rendezvousCancelled,
+              personalizations: [
+                {
+                  to: [{ email: appointment.user.email }],
+                },
+              ],
+            };
+
             sendGridMail
-              .send(msg)
-              .then(() => {
+              .send(msgRVCancelled)
+              .then((res) => {
                 console.log("Email sent");
               })
               .catch((error) => {
-                console.error(error);
+                console.log(error);
               });
           }
         })

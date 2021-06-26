@@ -11,7 +11,7 @@ const clientURL = process.env.CLIENT_URL;
 //Templates from sendGrid account
 const templates = {
   resetPasswordRequest: "d-369d35cfcc1c43e8966f24dfece375ae",
-  resetPassword: "d-34e7e6712a9840d0ba5e5c37d9d26df0",
+  resetPassword: "d-d0b9460bc12643b991d9c1841fbd19ab",
 };
 
 const requestPasswordReset = async (email) => {

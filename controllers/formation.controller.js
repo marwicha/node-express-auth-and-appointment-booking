@@ -1,5 +1,13 @@
 const db = require("../models");
 const Formation = db.formation;
+require("dotenv").config();
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+//Templates from sendGrid account
+const templates = {
+  formationAdded: "d-5189025449c147c8ad47ac8cd6aff15e",
+};
 
 exports.addFormation = (req, res) => {
   const requestBody = req.body;
@@ -16,6 +24,28 @@ exports.addFormation = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
+
+    const emailPatrick = "marwa.rekik.pro@gmail.com";
+
+    const workshopAdded = {
+      from: `Equipe IKDO <${emailPatrick}>`,
+      templateId: templates.formationAdded,
+      personalizations: [
+        {
+          to: [{ email: emailPatrick }],
+          body: "HELLO",
+        },
+      ],
+    };
+
+    sendGridMail
+      .send(workshopAdded)
+      .then((res) => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     Formation.find({ _id: saved._id }).exec((err, formation) =>
       res.json(formation)
