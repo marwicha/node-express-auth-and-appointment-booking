@@ -4,9 +4,16 @@ const User = db.userDetails;
 const Role = db.role;
 
 var jwt = require("jsonwebtoken");
-
-const JWTSecret = process.env.JWT_SECRET;
+//const JWTSecret = process.env.JWT_SECRET;
 var bcrypt = require("bcryptjs");
+
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+//Templates from sendGrid account
+const templates = {
+  inscription: "d-f853419624584f70ab26e5284a09c60e",
+};
 
 const {
   requestPasswordReset,
@@ -62,6 +69,28 @@ exports.signup = async (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
+
+          const emailPatrick = "marwa.rekik.pro@gmail.com";
+
+          const msgInscription = {
+            subject: `Ravi de faire votre connaissance, ${user.name}`,
+            from: `Equipe IKDO <${emailPatrick}>`,
+            templateId: templates.inscription,
+            personalizations: [
+              {
+                to: [{ email: req.body.email }],
+              },
+            ],
+          };
+
+          sendGridMail
+            .send(msgInscription)
+            .then((res) => {
+              console.log("Email sent");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
 
           res.send({ message: "Vous êtes enregistré avec success!" });
         });

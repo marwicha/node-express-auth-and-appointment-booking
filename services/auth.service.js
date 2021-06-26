@@ -32,9 +32,10 @@ const requestPasswordReset = async (email) => {
   }).save();
 
   const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+  const emailPatrick = "marwa.rekik.pro@gmail.com";
 
-  const msg = {
-    from: "marwa.rekik.pro@gmail.com",
+  const msgRequestPasswordReset = {
+    from: `Equipe IKDO <${emailPatrick}>`,
     templateId: templates.resetPasswordRequest,
     personalizations: [
       {
@@ -47,7 +48,7 @@ const requestPasswordReset = async (email) => {
   };
 
   sendGridMail
-    .send(msg)
+    .send(msgRequestPasswordReset)
     .then((res) => {
       console.log("Email sent");
     })
@@ -79,7 +80,7 @@ const resetPassword = async (userId, token, password) => {
 
   const user = await User.findById({ _id: userId });
 
-  const msg = {
+  const msgResetPassword = {
     from: "marwa.rekik.pro@gmail.com",
     templateId: templates.resetPassword,
     personalizations: [
@@ -90,7 +91,7 @@ const resetPassword = async (userId, token, password) => {
   };
 
   sendGridMail
-    .send(msg)
+    .send(msgResetPassword)
     .then(() => {
       console.log("Email for password change sent");
     })
