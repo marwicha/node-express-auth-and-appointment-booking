@@ -1,15 +1,17 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.payment = async (req, res) => {
-  const { paymentMethodType, currency, amount } = req.body;
+  const { paymentMethodType, currency, amount, name, phone, email } = req.body;
 
   const params = {
     payment_method_types: [paymentMethodType],
     currency: currency,
     amount: amount * 100,
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
+    billing_details: {
+      name: name,
+      email: email,
+      phone: phone,
+    },
   };
 
   try {
