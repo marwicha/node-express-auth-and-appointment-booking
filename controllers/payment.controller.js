@@ -46,9 +46,7 @@ exports.payment = async (req, res) => {
 
 exports.listPayement = async (req, res) => {
   try {
-    const listPayments = await stripe.payouts.list({
-      limit: 3,
-    });
+    const listPayments = await stripe.paymentIntents.list({});
     res.send({
       clientSecret: listPayments.client_secret,
     });
