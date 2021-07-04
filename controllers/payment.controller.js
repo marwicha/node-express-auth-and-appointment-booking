@@ -7,11 +7,9 @@ exports.payment = async (req, res) => {
     payment_method_types: [paymentMethodType],
     currency: currency,
     amount: amount * 100,
-    billing_details: {
-      name: name,
-      email: email,
-      phone: phone,
-    },
+    name: name,
+    email: email,
+    phone: phone,
   };
 
   try {
