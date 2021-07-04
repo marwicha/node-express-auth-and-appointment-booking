@@ -46,7 +46,7 @@ exports.payment = async (req, res) => {
 
 exports.listPayement = async (req, res) => {
   try {
-    await stripe.paymentIntents.list({
+    await stripe.payouts.list({
       limit: 3,
     });
   } catch (e) {
