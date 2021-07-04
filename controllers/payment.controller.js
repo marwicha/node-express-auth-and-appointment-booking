@@ -43,3 +43,17 @@ exports.payment = async (req, res) => {
     });
   }
 };
+
+exports.listPayement = async (req, res) => {
+  try {
+    await stripe.paymentIntents.list({
+      limit: 3,
+    });
+  } catch (e) {
+    return res.status(400).send({
+      error: {
+        message: e.message,
+      },
+    });
+  }
+};
