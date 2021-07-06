@@ -21,7 +21,7 @@ module.exports = function (app) {
   );
 
   app.put(
-    "api/cancel/:id",
+    "api/appointment/cancel/:id",
     [authJwt.verifyToken],
     controller.updateStatuCancelAppointment
   );
