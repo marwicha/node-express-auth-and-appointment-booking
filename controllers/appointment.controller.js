@@ -88,7 +88,7 @@ exports.updateStatuCancelAppointment = (req, res) => {
   const id = req.params.id;
 
   const reqBody = {
-    annule: req.body.annule,
+    annule: true,
   };
 
   Appointment.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
