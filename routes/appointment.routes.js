@@ -19,4 +19,10 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.delete
   );
+
+  app.put(
+    "api/cancel/:id",
+    [authJwt.verifyToken],
+    controller.updateStatuCancelAppointment
+  );
 };

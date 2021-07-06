@@ -55,6 +55,7 @@ exports.createAppointment = async (req, res) => {
     prestation: requestBody.prestation,
     slots: newSlot._id,
     user: user.id,
+    annule: false,
   });
 
   newAppointment.save((err, saved) => {
@@ -76,6 +77,36 @@ exports.createAppointment = async (req, res) => {
       .populate("slots")
       .exec((err, appointment) => res.json(appointment));
   });
+};
+
+exports.updateStatuCancelAppointment = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Les informations à mettre à jour ne peuvent pas être vides!",
+    });
+  }
+  const id = req.params.id;
+
+  const reqBody = {
+    annule: req.body.annule,
+  };
+
+  Appointment.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Impossible de mettre à jour les informations avec id= $ {id}. ce rendez vous n'existe pas!`,
+        });
+      } else
+        res.send({
+          message: "Rendez vous annulé avec succès.",
+        });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Erreur lors de la mise à jour des informations avec id=" + id,
+      });
+    });
 };
 
 exports.delete = async (req, res) => {

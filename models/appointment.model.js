@@ -8,6 +8,7 @@ const Appointment = mongoose.model(
     prestation: { type: String, required: true },
     created_at: Date,
     slots: { type: ObjectId, ref: "Slot" },
+    annule: { type: Boolean },
   })
 );
 

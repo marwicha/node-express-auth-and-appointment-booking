@@ -44,17 +44,3 @@ exports.payment = async (req, res) => {
   }
 };
 
-exports.listPayement = async (req, res) => {
-  try {
-    const listPayments = await stripe.paymentMethods.list({ type: "card" });
-    res.send({
-      clientSecret: listPayments.client_secret,
-    });
-  } catch (e) {
-    return res.status(400).send({
-      error: {
-        message: e.message,
-      },
-    });
-  }
-};
