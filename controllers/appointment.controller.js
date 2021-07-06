@@ -86,21 +86,6 @@ exports.update = async (req, res) => {
     });
   }
   const id = req.params.id;
-
-  Appointment.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update  with id=${id}. Maybe it  was not found!`,
-        });
-      } else res.status(200).json(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error updating with id=" + id,
-      });
-    });
-
   const msgRVCancelled = {
     from: `Equipe IKDO <${emailPatrick}>`,
     templateId: templates.rendezvousCancelled,
@@ -111,17 +96,33 @@ exports.update = async (req, res) => {
     ],
   };
 
-  sendGridMail
-    .send(msgRVCancelled)
-    .then((res) => {
-      console.log("Email sent");
+  Appointment.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update  with id=${id}. Maybe it  was not found!`,
+        });
+      } else {
+        res.status(200).json(data);
+
+        sendGridMail
+          .send(msgRVCancelled)
+          .then((res) => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        res.send({
+          message: "Votre rendez vous est annulé avec succès!",
+        });
+      }
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating with id=" + id,
+      });
     });
-  res.send({
-    message: "Votre rendez vous est annulé avec succès!",
-  });
 };
 
 exports.delete = async (req, res) => {

@@ -3,6 +3,15 @@ const User = db.user;
 const Appointment = db.appointment;
 const Slot = db.slot;
 
+require("dotenv").config();
+const sendGridMail = require("@sendgrid/mail");
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+//Templates from sendGrid account
+const templates = {
+  accountDeleted: "d-b0498b7d8f404673b1ce7fee8a45c1d1",
+};
+
 // update user information
 exports.update = (req, res) => {
   if (!req.body) {
@@ -16,6 +25,7 @@ exports.update = (req, res) => {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
+    roles: req.body.roles,
   };
 
   User.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
@@ -37,19 +47,33 @@ exports.update = (req, res) => {
 };
 
 exports.deleteUserAndAppointments = async (req, res) => {
-  // const appointment = await Appointment.findById(req.params.id);
-
-  // const slot = await Slot.findById(appointment.slots);
-
-  // await Slot.findOneAndDelete({ _id: slot._id });
-
-  // await Appointment.findOneAndDelete({ _id: req.params.id });
-
   const user = await User.findById(req.params.id);
 
   await Appointment.remove({ user: user.id });
   await Slot.remove({ user: user.id });
   await User.remove({ _id: user._id });
+
+  const emailPatrick = "marwa.rekik.pro@gmail.com";
+
+  const msgDeleteAccount = {
+    subject: "Votre compte a été supprimé avec succès",
+    from: `Equipe IKDO <${emailPatrick}>`,
+    templateId: templates.accountDeleted,
+    personalizations: [
+      {
+        to: [{ email: user.email }],
+      },
+    ],
+  };
+
+  sendGridMail
+    .send(msgDeleteAccount)
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   return res.json({
     message: "Le compte et les rendez vous d'utilisateur sont supprimés",
