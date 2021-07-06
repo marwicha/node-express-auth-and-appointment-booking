@@ -86,11 +86,29 @@ exports.update = async (req, res) => {
     });
   }
 
-  let appointment = await Appointment.find({ _id: req.params.id });
+  // let appointment = await Appointment.find({ _id: req.params.id });
 
-  appointment.annule = true;
+  // let app = { ...appointment };
+  // app._id = req.body._id;
+  // app.user = req.body.user;
+  // app.annule = true;
+  // app.prestation = req.body.prestation;
+  // app.slots = req.body.slots;
+  const id = req.params.id;
 
-  res.status(200).json(appointment);
+  Appointment.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update  with id=${id}. Maybe it  was not found!`,
+        });
+      } else res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating with id=" + id,
+      });
+    });
 };
 
 exports.delete = async (req, res) => {
