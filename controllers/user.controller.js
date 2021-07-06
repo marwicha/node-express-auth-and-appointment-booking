@@ -39,9 +39,11 @@ exports.update = (req, res) => {
 exports.deleteUserAndAppointments = async (req, res) => {
   await Appointment.remove({ user: req.user.id });
   await Slot.remove({ user: req.user.id });
-  await User.remove({ user: req.user.id });
+  await User.remove({ _id: req.user._id });
 
-  return res.json({ message: "ok" });
+  return res.json({
+    message: "Le compte et les rendez vous d'utilisateur sont supprimés",
+  });
 };
 
 exports.adminBoard = (req, res) => {
