@@ -88,7 +88,8 @@ exports.update = async (req, res) => {
 
   const appointment = await Appointment.findById(req.params.id);
 
-  const user = await User.findById(appointment.user.id);
+  console.log(appointment);
+  const user = await User.findById(appointment.user._id);
 
   const msgRVCancelled = {
     from: `Equipe IKDO <${emailPatrick}>`,

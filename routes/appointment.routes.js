@@ -21,9 +21,9 @@ module.exports = function (app) {
     controller.update
   );
 
-  app.delete(
-    "/api/appointment/delete/:id",
-    [authJwt.verifyToken],
-    controller.delete
-  );
+  // app.delete(
+  //   "/api/appointment/delete/:id",
+  //   [authJwt.verifyToken],
+  //   controller.delete
+  // );
 };
