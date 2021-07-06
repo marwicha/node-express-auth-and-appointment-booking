@@ -87,7 +87,7 @@ exports.update = async (req, res) => {
   }
 
   const id = req.params.id;
-  let appointment = await Appointment.find((app) => app.id === id);
+  let appointment = await Appointment.findBydId(id);
 
   appointment.annule = true;
 
