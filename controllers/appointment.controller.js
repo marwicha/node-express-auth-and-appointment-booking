@@ -86,8 +86,7 @@ exports.update = async (req, res) => {
     });
   }
 
-  const id = req.params.id;
-  let appointment = await Appointment.findBydId(id);
+  let appointment = await Appointment.find({ _id: req.params.id });
 
   appointment.annule = true;
 
