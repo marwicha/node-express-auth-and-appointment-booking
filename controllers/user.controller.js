@@ -37,9 +37,19 @@ exports.update = (req, res) => {
 };
 
 exports.deleteUserAndAppointments = async (req, res) => {
-  await Appointment.remove({ user: req.user.id });
-  await Slot.remove({ user: req.user.id });
-  await User.remove({ _id: req.user._id });
+  // const appointment = await Appointment.findById(req.params.id);
+
+  // const slot = await Slot.findById(appointment.slots);
+
+  // await Slot.findOneAndDelete({ _id: slot._id });
+
+  // await Appointment.findOneAndDelete({ _id: req.params.id });
+
+  const user = await User.findById(req.params.id);
+
+  await Appointment.remove({ user: user.id });
+  await Slot.remove({ user: user.id });
+  await User.remove({ _id: user._id });
 
   return res.json({
     message: "Le compte et les rendez vous d'utilisateur sont supprimés",
