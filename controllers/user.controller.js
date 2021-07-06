@@ -56,7 +56,6 @@ exports.deleteUserAndAppointments = async (req, res) => {
   const emailPatrick = "marwa.rekik.pro@gmail.com";
 
   const msgDeleteAccount = {
-    subject: "Votre compte a été supprimé avec succès",
     from: `Equipe IKDO <${emailPatrick}>`,
     templateId: templates.accountDeleted,
     personalizations: [

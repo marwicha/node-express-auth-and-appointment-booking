@@ -74,7 +74,6 @@ exports.signup = async (req, res) => {
           const emailPatrick = "marwa.rekik.pro@gmail.com";
 
           const msgInscription = {
-            subject: "Ravi de faire votre connaissance",
             from: `Equipe IKDO <${emailPatrick}>`,
             templateId: templates.inscription,
             personalizations: [
