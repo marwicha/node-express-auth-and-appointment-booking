@@ -8,21 +8,22 @@ module.exports = function (app) {
     controller.createAppointment
   );
   app.get("/api/appointment/all", controller.allAppointments);
+
   app.get(
     "/api/appointment/:id",
     [authJwt.verifyToken],
     controller.getUserAppointments
   );
 
+  app.put(
+    "api/appointment/cancel/:id",
+    [authJwt.verifyToken],
+    controller.update
+  );
+
   app.delete(
     "/api/appointment/delete/:id",
     [authJwt.verifyToken],
     controller.delete
-  );
-
-  app.put(
-    "api/appointment/cancel/:id",
-    [authJwt.verifyToken],
-    controller.updateStatuCancelAppointment
   );
 };

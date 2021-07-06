@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
+
 require("dotenv").config();
 const dbConfig = require("./models");
 const Role = dbConfig.role;
@@ -62,29 +63,6 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// simple route
-app.get("/", (req, res) => {
-  const body = "This is a test email using SendGrid from Node.js";
-  const msg = {
-    to: "marwa.rekik.pro@gmail.com",
-    from: "marwa.rekik.pro@gmail.com",
-    subject: "Test email with Node.js and SendGrid",
-    text: body,
-    html: `<strong>${body}</strong>`,
-  };
-
-  sendGridMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
-
-//res.json({ message: "IKDO project." });
 
 // routes for auth user
 require("./routes/auth.routes")(app);

@@ -79,40 +79,27 @@ exports.createAppointment = async (req, res) => {
   });
 };
 
-exports.updateStatuCancelAppointment = (req, res) => {
+exports.update = async (req, res) => {
   if (!req.body) {
     return res.status(400).send({
       message: "Les informations à mettre à jour ne peuvent pas être vides!",
     });
   }
+
   const id = req.params.id;
+  let appointment = await Appointment.find((app) => app.id === id);
 
-  const reqBody = {
-    annule: true,
-  };
+  appointment.prestation = req.body.prestation;
+  appointment.annule = true;
 
-  Appointment.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Impossible de mettre à jour les informations avec id= $ {id}. ce rendez vous n'existe pas!`,
-        });
-      } else
-        res.send({
-          message: "Rendez vous annulé avec succès.",
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Erreur lors de la mise à jour des informations avec id=" + id,
-      });
-    });
+  res.status(200).json(appointment);
 };
 
 exports.delete = async (req, res) => {
   const emailPatrick = "marwa.rekik.pro@gmail.com";
 
   const appointment = await Appointment.findById(req.params.id);
+
   const slot = await Slot.findById(appointment.slots);
 
   await Slot.findOneAndDelete({ _id: slot._id });
