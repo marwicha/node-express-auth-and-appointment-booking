@@ -87,6 +87,7 @@ exports.update = async (req, res) => {
   }
 
   const appointment = await Appointment.findById(req.params.id);
+
   const user = await User.findById(appointment.user.id);
 
   const msgRVCancelled = {
@@ -99,11 +100,13 @@ exports.update = async (req, res) => {
     ],
   };
 
-  Appointment.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Appointment.findByIdAndUpdate(req.params.id, req.body, {
+    useFindAndModify: false,
+  })
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update  with id=${id}. Maybe it  was not found!`,
+          message: `Cannot update  with id=${req.params.id}. Maybe it  was not found!`,
         });
       } else {
         res.status(200).json(data);
@@ -111,7 +114,7 @@ exports.update = async (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error updating with id=" + id,
+        message: "Error updating with id=" + req.params.id,
       });
     });
 
@@ -128,38 +131,38 @@ exports.update = async (req, res) => {
   });
 };
 
-exports.delete = async (req, res) => {
-  const emailPatrick = "marwa.rekik.pro@gmail.com";
+// exports.delete = async (req, res) => {
+//   const emailPatrick = "marwa.rekik.pro@gmail.com";
 
-  const appointment = await Appointment.findById(req.params.id);
+//   const appointment = await Appointment.findById(req.params.id);
 
-  const slot = await Slot.findById(appointment.slots);
+//   const slot = await Slot.findById(appointment.slots);
 
-  await Slot.findOneAndDelete({ _id: slot._id });
+//   await Slot.findOneAndDelete({ _id: slot._id });
 
-  await Appointment.findOneAndDelete({ _id: req.params.id });
+//   await Appointment.findOneAndDelete({ _id: req.params.id });
 
-  const user = await User.findById(appointment.user);
+//   const user = await User.findById(appointment.user);
 
-  const msgRVCancelled = {
-    from: `Equipe IKDO <${emailPatrick}>`,
-    templateId: templates.rendezvousCancelled,
-    personalizations: [
-      {
-        to: [{ email: user.email }],
-      },
-    ],
-  };
+//   const msgRVCancelled = {
+//     from: `Equipe IKDO <${emailPatrick}>`,
+//     templateId: templates.rendezvousCancelled,
+//     personalizations: [
+//       {
+//         to: [{ email: user.email }],
+//       },
+//     ],
+//   };
 
-  sendGridMail
-    .send(msgRVCancelled)
-    .then((res) => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  res.send({
-    message: "Votre rendez vous est annulé avec succès!",
-  });
-};
+//   sendGridMail
+//     .send(msgRVCancelled)
+//     .then((res) => {
+//       console.log("Email sent");
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+//   res.send({
+//     message: "Votre rendez vous est annulé avec succès!",
+//   });
+// };
