@@ -13,6 +13,8 @@ const templates = {
   rendezvousCancelled: "d-e1ba2bd0352f4c62a860a5a54bf2723c",
 };
 
+const emailPatrick = "marwa.rekik.pro@gmail.com";
+
 exports.allAppointments = (req, res) => {
   // Returns all appointments
   Appointment.find({})
@@ -29,8 +31,6 @@ exports.getUserAppointments = (req, res) => {
 exports.createAppointment = async (req, res) => {
   const requestBody = req.body;
   const user = await User.findById(req.user.id);
-
-  const emailPatrick = "marwa.rekik.pro@gmail.com";
 
   const msgRVConfirmed = {
     from: `Equipe IKDO <${emailPatrick}>`,
@@ -88,7 +88,6 @@ exports.update = async (req, res) => {
 
   const appointment = await Appointment.findById(req.params.id);
 
-  console.log(appointment);
   const user = await User.findById(appointment.user._id);
 
   const msgRVCancelled = {
