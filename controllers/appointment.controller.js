@@ -85,15 +85,6 @@ exports.update = async (req, res) => {
       message: "Les informations à mettre à jour ne peuvent pas être vides!",
     });
   }
-
-  // let appointment = await Appointment.find({ _id: req.params.id });
-
-  // let app = { ...appointment };
-  // app._id = req.body._id;
-  // app.user = req.body.user;
-  // app.annule = true;
-  // app.prestation = req.body.prestation;
-  // app.slots = req.body.slots;
   const id = req.params.id;
 
   Appointment.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
@@ -109,6 +100,28 @@ exports.update = async (req, res) => {
         message: "Error updating with id=" + id,
       });
     });
+
+  const msgRVCancelled = {
+    from: `Equipe IKDO <${emailPatrick}>`,
+    templateId: templates.rendezvousCancelled,
+    personalizations: [
+      {
+        to: [{ email: user.email }],
+      },
+    ],
+  };
+
+  sendGridMail
+    .send(msgRVCancelled)
+    .then((res) => {
+      console.log("Email sent");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  res.send({
+    message: "Votre rendez vous est annulé avec succès!",
+  });
 };
 
 exports.delete = async (req, res) => {

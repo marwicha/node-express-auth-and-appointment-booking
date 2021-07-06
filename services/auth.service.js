@@ -79,9 +79,11 @@ const resetPassword = async (userId, token, password) => {
   );
 
   const user = await User.findById({ _id: userId });
+  const emailPatrick = "marwa.rekik.pro@gmail.com";
 
   const msgResetPassword = {
-    from: "marwa.rekik.pro@gmail.com",
+    subject: "Ravi de faire votre connaissance",
+    from: `Equipe IKDO <${emailPatrick}>`,
     templateId: templates.resetPassword,
     personalizations: [
       {
