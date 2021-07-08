@@ -25,7 +25,6 @@ exports.update = (req, res) => {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    roles: req.body.roles,
   };
 
   User.findOneAndUpdate(id, reqBody, { useFindAndModify: false })

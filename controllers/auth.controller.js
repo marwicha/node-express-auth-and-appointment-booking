@@ -70,7 +70,7 @@ exports.signup = async (req, res) => {
             return;
           }
 
-          res.send({ message: "Vous êtes enregistré avec success!" });
+          res.send({ message: "Vous êtes enregistré avec succés!" });
           const emailPatrick = "marwa.rekik.pro@gmail.com";
 
           const msgInscription = {
