@@ -1,10 +1,20 @@
 const db = require("../models");
 const Appointment = db.appointment;
+const User = db.user;
+const Slot = db.slot;
 
-exports.allAppointmentsAdmin = (req, res) => {
+exports.allAppointmentsAdmin = async (req, res) => {
   // Returns all appointments
-  Appointment.find({})
-    .populate("slots")
-    .populate("user")
+  await Appointment.find()
+    .populate([
+      {
+        path: "user",
+        model: User,
+      },
+      {
+        path: "slots",
+        model: Slot,
+      },
+    ])
     .exec((err, appointments) => res.json(appointments));
 };
