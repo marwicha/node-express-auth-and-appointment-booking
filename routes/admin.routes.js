@@ -9,7 +9,7 @@ module.exports = function (app) {
   );
 
   app.put(
-    "api/admin/appointment/cancel/:id",
+    "/api/admin/appointment/cancel/:id",
     [authJwt.verifyToken],
     controller.cancelAppointmentByAdmin
   );
