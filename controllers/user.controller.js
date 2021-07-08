@@ -19,16 +19,16 @@ exports.update = (req, res) => {
       message: "Les informations à mettre à jour ne peuvent pas être vides!",
     });
   }
-  const id = req.params.id;
 
-  const reqBody = {
+  const reqBody = new User({
     _id: req.params.id,
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-  };
+    roles: req.body.roles,
+  });
 
-  User.findOneAndUpdate(id, reqBody, { useFindAndModify: false })
+  User.updateOne({ _id: req.params.id }, reqBody)
     .then((data) => {
       if (!data) {
         res.status(404).send({
