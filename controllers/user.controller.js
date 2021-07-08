@@ -22,7 +22,7 @@ exports.update = (req, res) => {
   const id = req.params.id;
 
   const reqBody = {
-    id: req.params.id,
+    _id: req.params.id,
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
