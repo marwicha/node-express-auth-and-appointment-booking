@@ -32,7 +32,7 @@ exports.update = (req, res) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Impossible de mettre à jour les informations avec id= $ {id}. ce utilisateur n'existe pas!`,
+          message: `Impossible de mettre à jour les informations avec id= ${req.params.id}. ce utilisateur n'existe pas!`,
         });
       } else
         res.send({
@@ -41,7 +41,9 @@ exports.update = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Erreur lors de la mise à jour des informations avec id=" + id,
+        message:
+          "Erreur lors de la mise à jour des informations avec id=" +
+          req.params.id,
       });
     });
 };
