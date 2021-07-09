@@ -20,15 +20,19 @@ exports.update = (req, res) => {
     });
   }
 
-  const reqBody = new User({
-    _id: req.params.id,
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    roles: req.body.roles,
-  });
+  // const reqBody = {
+  //   _id: req.params.id,
+  //   name: req.body.name,
+  //   email: req.body.email,
+  //   phone: req.body.phone,
+  //   //roles: req.body.roles,
+  // };
 
-  User.updateOne({ _id: req.params.id }, reqBody)
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body },
+    { new: true }
+  )
     .then((data) => {
       if (!data) {
         res.status(404).send({
