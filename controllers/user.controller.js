@@ -20,13 +20,13 @@ exports.update = (req, res) => {
     });
   }
 
-  const reqBody = {
+  const reqBody = new User({
     _id: req.params.id,
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
     roles: req.body.roles,
-  };
+  });
 
   User.updateOne({ _id: req.params.id }, reqBody)
     .then((data) => {
