@@ -18,7 +18,8 @@ exports.addFormation = async (req, res) => {
 
   const newFormation = new Formation({
     name: requestBody.name,
-    dateText: requestBody.dateText,
+    dateDebut: requestBody.dateDebut,
+    dateFin: requestBody.dateFin,
     description: requestBody.description,
     prix: requestBody.prix,
   });
@@ -41,7 +42,8 @@ exports.addFormation = async (req, res) => {
           to: [{ email: user.email }],
           dynamic_template_data: {
             name: saved.name,
-            date: saved.dateText,
+            dateDebut: saved.dateDebut,
+            dateFin: saved.dateFin,
             description: saved.description,
             prix: saved.prix,
           },
