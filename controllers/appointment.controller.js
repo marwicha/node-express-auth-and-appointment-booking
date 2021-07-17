@@ -126,6 +126,7 @@ exports.update = async (req, res) => {
     .catch((error) => {
       console.log(error);
     });
+    
   res.send({
     message: "Votre rendez vous est annulé avec succès!",
   });

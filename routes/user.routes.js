@@ -1,4 +1,5 @@
 const { authJwt } = require("../middlewares");
+const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/user.controller");
 
 module.exports = function (app) {
@@ -16,7 +17,11 @@ module.exports = function (app) {
     controller.adminBoard
   );
 
-  app.put("/api/compte/:id", [authJwt.verifyToken], controller.update);
+  app.put(
+    "/api/compte/:id",
+    [authJwt.verifyToken, verifySignUp.checkDuplicateEmail],
+    controller.update
+  );
 
   app.delete(
     "/api/compte/:id",

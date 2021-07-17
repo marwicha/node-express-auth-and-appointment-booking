@@ -20,14 +20,6 @@ exports.update = (req, res) => {
     });
   }
 
-  // const reqBody = {
-  //   _id: req.params.id,
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   phone: req.body.phone,
-  //   //roles: req.body.roles,
-  // };
-
   User.findOneAndUpdate(
     { _id: req.params.id },
     { $set: req.body },
@@ -36,7 +28,7 @@ exports.update = (req, res) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Impossible de mettre à jour les informations avec id= ${req.params.id}. ce utilisateur n'existe pas!`,
+          message: `Impossible de mettre à jour les informations avec id= ${req.params.id}. cet utilisateur n'existe pas!`,
         });
       } else
         res.send({
