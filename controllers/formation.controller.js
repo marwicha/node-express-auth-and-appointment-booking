@@ -10,7 +10,7 @@ sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const templates = {
   formationAdded: "d-5189025449c147c8ad47ac8cd6aff15e",
 };
-const emailPatrick = "marwa.rekik.pro@gmail.com";
+const emailPatrick = "ikdo.zen@gmail.com";
 
 exports.addFormation = async (req, res) => {
   const requestBody = req.body;

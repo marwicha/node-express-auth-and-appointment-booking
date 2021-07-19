@@ -13,7 +13,7 @@ const templates = {
   rendezvousCancelled: "d-e1ba2bd0352f4c62a860a5a54bf2723c",
 };
 
-const emailPatrick = "marwa.rekik.pro@gmail.com";
+const emailPatrick = "ikdo.zen@gmail.com";
 
 exports.allAppointments = (req, res) => {
   // Returns all appointments
@@ -126,7 +126,7 @@ exports.update = async (req, res) => {
     .catch((error) => {
       console.log(error);
     });
-    
+
   res.send({
     message: "Votre rendez vous est annulé avec succès!",
   });

@@ -31,8 +31,13 @@ const requestPasswordReset = async (email) => {
     createdAt: Date.now(),
   }).save();
 
+  if (!user) {
+    return res.status(404).send({ message: "cet email n'existe pas." });
+  }
+
   const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-  const emailPatrick = "marwa.rekik.pro@gmail.com";
+
+  const emailPatrick = "ikdo.zen@gmail.com";
 
   const msgRequestPasswordReset = {
     from: `Equipe IKDO <${emailPatrick}>`,
@@ -79,7 +84,7 @@ const resetPassword = async (userId, token, password) => {
   );
 
   const user = await User.findById({ _id: userId });
-  const emailPatrick = "marwa.rekik.pro@gmail.com";
+  const emailPatrick = "ikdo.zen@gmail.com";
 
   const msgResetPassword = {
     from: `Equipe IKDO <${emailPatrick}>`,

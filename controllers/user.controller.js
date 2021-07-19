@@ -51,7 +51,7 @@ exports.deleteUserAndAppointments = async (req, res) => {
   await Slot.remove({ user: user.id });
   await User.remove({ _id: user._id });
 
-  const emailPatrick = "marwa.rekik.pro@gmail.com";
+  const emailPatrick = "ikdo.zen@gmail.com";
 
   const msgDeleteAccount = {
     from: `Equipe IKDO <${emailPatrick}>`,

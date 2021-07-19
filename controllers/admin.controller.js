@@ -12,7 +12,7 @@ const templates = {
   rendezvousCancelledByAdmin: "d-c79e43115e054a2c9725d7e6aa05d98e",
 };
 
-const emailPatrick = "marwa.rekik.pro@gmail.com";
+const emailPatrick = "ikdo.zen@gmail.com";
 
 exports.allAppointmentsAdmin = async (req, res) => {
   // Returns all appointments

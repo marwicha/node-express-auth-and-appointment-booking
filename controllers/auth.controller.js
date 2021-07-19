@@ -71,7 +71,7 @@ exports.signup = async (req, res) => {
           }
 
           res.send({ message: "Vous êtes enregistré avec succés!" });
-          const emailPatrick = "marwa.rekik.pro@gmail.com";
+          const emailPatrick = "ikdo.zen@gmail.com";
 
           const msgInscription = {
             from: `Equipe IKDO <${emailPatrick}>`,
@@ -150,10 +150,6 @@ exports.resetPasswordRequestController = async (req, res, next) => {
   const requestPasswordResetService = await requestPasswordReset(
     req.body.email
   );
-
-  if (!req.body.email) {
-    return res.status(404).send({ message: "cet email n'existe pas." });
-  }
 
   return res.json(requestPasswordResetService);
 };
