@@ -20,6 +20,7 @@ module.exports = function (app) {
 
   app.post(
     "/api/auth/reset-request",
+    [verifySignUp.checkDuplicateEmail],
     controller.resetPasswordRequestController
   );
 

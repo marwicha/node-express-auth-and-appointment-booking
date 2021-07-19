@@ -151,6 +151,10 @@ exports.resetPasswordRequestController = async (req, res, next) => {
     req.body.email
   );
 
+  if (!req.body.email) {
+    return res.status(404).send({ message: "cet email n'existe pas." });
+  }
+
   return res.json(requestPasswordResetService);
 };
 
